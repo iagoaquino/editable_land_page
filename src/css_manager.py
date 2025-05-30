@@ -6,7 +6,7 @@ from pathlib import Path
 
 #Functions
 def get_complementary_text():
-    with open('./styles/globals.css', 'r') as file:
+    with open('../public/styles/globals.css', 'r') as file:
         whole_text = file.read().replace("\n", "")
 
     end_flag = True
@@ -35,7 +35,7 @@ def mesclate_text(css_text_to_mesclate):
     --main-text-weight: {css_text_to_mesclate['main_text_weight']};--font-size: {css_text_to_mesclate['font_size']};--normal-text-font-family: {css_text_to_mesclate['normal_text_font_family']};}}"
 
 def create_new_style(css_text, style_name):
-    save_folder = Path("saved_styles")
+    save_folder = Path("../public/saved_styles/")
     save_folder.mkdir(exist_ok=True)
     save_css(css_text, f'{save_folder}/{style_name}.css')
 
@@ -47,20 +47,28 @@ CORS(app)
 def merge_css():
     request_response = request.get_json()
     main_configuration = mesclate_text(request_response)
-    save_css(main_configuration+get_complementary_text(), "./styles/globals.css")
+    save_css(main_configuration+get_complementary_text(), "../public/styles/globals.css")
     return ""
 
 @app.post("/save_new")
 def save_new_css():
     request_response = request.get_json()
     main_configuration = mesclate_text(request_response)
-    create_new_style(main_configuration+get_complementary_text(), request_response['style_name'])
+    create_new_style(main_configuration+get_complementary_text(), request_response['name'])
     return ""
 
 @app.get("/get_saved_files")
 def get_all_files_saved():
-    files = glob("saved_styles/*css")
+    files = glob("../public/saved_styles/*css")
     files_name_list = []
     for file in files:
         files_name_list.append(file.split("\\")[1].split('.')[0])
     return files_name_list
+
+@app.delete("/delete/<name>")
+def delete_file(name=None):
+    file = Path('../public/saved_styles/').joinpath(f'{name}.css')
+    print(file)
+    if file.exists():
+        file.unlink()
+    return ""
