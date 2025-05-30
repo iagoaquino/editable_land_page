@@ -9,10 +9,19 @@ import {
   Select,
   Card,
   InputNumber,
+  Modal,
+  Input,
+  Form,
+  notification,
+  Spin,
 } from 'antd';
-import React, { useState, useEffect, useMemo } from 'react';
-import '@/styles/globals.css';
-import { save_new_css_configuration } from '@/api_connection/';
+import React, { useState, useEffect, useMemo, useReducer } from 'react';
+import { DeleteFilled, PlusOutlined, EditFilled } from '@ant-design/icons';
+import {
+  save_new_css_configuration,
+  update_saved_files_list,
+  delete_file,
+} from '@/api_connection/';
 
 const { Content, Footer, Header } = Layout;
 const { Option } = Select;
@@ -36,6 +45,23 @@ export default function ConfigurationPage() {
   const [fontSize, setFontSize] = useState<string>('');
   const [normalTextFontFamily, setNormalTextFontFamily] = useState<string>('');
 
+  //State manager
+  const [loading, setLoading] = useState<boolean>(false);
+
+  //Necessary data
+  const [savedCssList, setSavedCssList] = useState<Array<string>>([]);
+  const [selectedCss, setSelectedCss] = useState<string>('');
+  const [currentStyleSheet, setCurrentStyleSheet] = useState<any>();
+
+  //Modal manager
+  const [showModalSaveNew, setShowModalSaveNew] = useState<boolean>(false);
+  const [showModalSuccess, setShowModalSucess] = useState<boolean>(false);
+  const [showModalError, setShowModalError] = useState<boolean>(false);
+
+  //Forms
+  const [new_style_form] = Form.useForm();
+
+  //Functions
   const get_initial_color_configuration = () => {
     const root = document.documentElement;
     setPrimaryColor(getComputedStyle(root).getPropertyValue('--primary-color'));
@@ -57,9 +83,93 @@ export default function ConfigurationPage() {
     setNormalTextFontFamily(getComputedStyle(root).getPropertyValue('--normal-text-font-family'));
   };
 
+  const save = async (name: string | undefined) => {
+    setLoading(true);
+    try {
+      if (
+        await save_new_css_configuration({
+          primary_color: color_configurations['primary_color'],
+          secondary_color: color_configurations['secondary_color'],
+          third_color: color_configurations['third_color'],
+          primary_font_color: color_configurations['primary_font_color'],
+          secondary_font_color: color_configurations['secondary_font_color'],
+          title_weight: font_configuration['title_weight'],
+          title_size: font_configuration['title_size'],
+          title_font_family: font_configuration['title_font_family'],
+          main_text_weight: font_configuration['main_text_weight'],
+          font_size: font_configuration['font_size'],
+          normal_text_font_family: font_configuration['normal_text_font_family'],
+          name: name,
+        })
+      ) {
+        setShowModalSucess(true);
+        updateSavedList();
+      }
+    } catch (err) {
+      setShowModalError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteFile = async (name: string) => {
+    setLoading(true);
+    try {
+      if (await delete_file(name)) {
+        setShowModalSucess(true);
+        setSelectedCss('');
+        await updateSavedList();
+      }
+    } catch (err) {
+      setShowModalSucess(false);
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateSavedList = async () => {
+    setLoading(true);
+    try {
+      setSavedCssList(await update_saved_files_list());
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const setCssConfiguration = (path: string) => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = path;
+    link.id = 'dynamic-theme';
+    document.head.append(link);
+
+    return link;
+  };
+
+  //React functions
   useEffect(() => {
-    get_initial_color_configuration();
-    get_initial_font_configuration();
+    setCurrentStyleSheet(setCssConfiguration('styles/globals.css'));
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      get_initial_color_configuration();
+      get_initial_font_configuration();
+    }, 1000);
+  }, [currentStyleSheet]);
+
+  useEffect(() => {
+    if (selectedCss !== '') {
+      document.head.removeChild(currentStyleSheet);
+      setCurrentStyleSheet(setCssConfiguration(`saved_styles/${selectedCss}.css`));
+    }
+  }, [selectedCss]);
+
+  useEffect(() => {
+    updateSavedList();
   }, []);
 
   const color_configurations = useMemo(() => {
@@ -123,10 +233,6 @@ export default function ConfigurationPage() {
   const secondary_style: React.CSSProperties = {
     backgroundColor: color_configurations['secondary_color'],
     color: color_configurations['secondary_font_color'],
-  };
-  const third_style: React.CSSProperties = {
-    backgroundColor: color_configurations['third_color'],
-    color: color_configurations['primary_font_color'],
   };
 
   const title_style: React.CSSProperties = {
@@ -314,27 +420,93 @@ export default function ConfigurationPage() {
           </Col>
         </Row>
         <Row align={'middle'} justify={'center'} style={{ height: '20vh' }}>
-          <Button
-            onClick={() => {
-              save_new_css_configuration({
-                primary_color: color_configurations['primary_color'],
-                secondary_color: color_configurations['secondary_color'],
-                third_color: color_configurations['third_color'],
-                primary_font_color: color_configurations['primary_font_color'],
-                secondary_font_color: color_configurations['secondary_font_color'],
-                title_weight: font_configuration['title_weight'],
-                title_size: font_configuration['title_size'],
-                title_font_family: font_configuration['title_font_family'],
-                main_text_weight: font_configuration['main_text_weight'],
-                font_size: font_configuration['font_size'],
-                normal_text_font_family: font_configuration['normal_text_font_family'],
-              });
-            }}
-            style={primary_style}
-            size="large"
-          >
-            Salvar
-          </Button>
+          <Card style={{ width: '80%' }}>
+            <Row justify={'center'}>
+              <Col span={10}>
+                <Card
+                  title={
+                    <Row style={secondary_style} justify={'center'}>
+                      Usar modelos salvos
+                    </Row>
+                  }
+                >
+                  <Row justify={'center'}>
+                    <Col span={11}>
+                      <Select
+                        style={{ width: 200 }}
+                        placeholder={'Selecione o estilo salvo'}
+                        value={selectedCss}
+                        onChange={setSelectedCss}
+                      >
+                        {savedCssList.map((name) => (
+                          <Option value={name} key={name}>
+                            {name}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Col>
+                    <Col span={2} offset={1}>
+                      <Button
+                        size="large"
+                        color="danger"
+                        variant="solid"
+                        onClick={() => {
+                          deleteFile(selectedCss);
+                        }}
+                      >
+                        <DeleteFilled />
+                      </Button>
+                    </Col>
+                    <Col span={2} offset={1}>
+                      <Button
+                        size="large"
+                        color="green"
+                        variant="solid"
+                        onClick={() => {
+                          save(selectedCss);
+                        }}
+                      >
+                        <EditFilled />
+                      </Button>
+                    </Col>
+                    <Col span={2} offset={1}>
+                      <Button
+                        size="large"
+                        color="primary"
+                        variant="solid"
+                        onClick={() => {
+                          setShowModalSaveNew(true);
+                        }}
+                      >
+                        <PlusOutlined />
+                      </Button>
+                    </Col>
+                  </Row>
+                </Card>
+              </Col>
+              <Col span={10} offset={4}>
+                <Card
+                  title={
+                    <Row style={secondary_style} justify={'center'}>
+                      Aplicar estilo atual ao site
+                    </Row>
+                  }
+                >
+                  <Row justify={'center'} align={'middle'}>
+                    <Button
+                      onClick={() => {
+                        save(undefined);
+                      }}
+                      style={primary_style}
+                      size="large"
+                    >
+                      Aplicar estilo
+                    </Button>
+                  </Row>
+                </Card>
+              </Col>
+            </Row>
+          </Card>
         </Row>
         <Row justify={'center'} align={'middle'} style={{ height: '20vh' }}>
           <Col span={7} style={example_box_primary_style}>
@@ -390,6 +562,76 @@ export default function ConfigurationPage() {
           </Col>
         </Row>
       </Content>
+      {/*modais*/}
+      <Modal
+        open={showModalSuccess}
+        footer={
+          <Row justify={'center'} align={'middle'}>
+            <Button size="large" style={primary_style} onClick={() => setShowModalSucess(false)}>
+              OK
+            </Button>
+          </Row>
+        }
+      >
+        <Row style={title_style} justify={'center'}>
+          A ação foi um sucesso
+        </Row>
+      </Modal>
+      <Modal
+        open={showModalError}
+        footer={
+          <Row justify={'center'} align={'middle'}>
+            <Button size="large" style={primary_style} onClick={() => setShowModalError(false)}>
+              OK
+            </Button>
+          </Row>
+        }
+      >
+        <Row justify={'center'}>Error na operação, por favor checar os logs</Row>
+      </Modal>
+      <Modal open={loading} closable={false} footer={<></>}>
+        <Row justify={'center'}>
+          <Spin size="large" />
+        </Row>
+        <Row justify={'center'} style={title_style}>
+          Carregando...
+        </Row>
+      </Modal>
+      <Modal
+        open={showModalSaveNew}
+        footer={
+          <Row align={'middle'} justify={'center'}>
+            <Col>
+              <Button
+                onClick={() => {
+                  save(new_style_form.getFieldValue('name'));
+                  setShowModalSaveNew(false);
+                }}
+                style={primary_style}
+              >
+                Salvar
+              </Button>
+            </Col>
+            <Col offset={8}>
+              <Button
+                onClick={() => {
+                  setShowModalSaveNew(false);
+                }}
+              >
+                Cancelar
+              </Button>
+            </Col>
+          </Row>
+        }
+      >
+        <Form form={new_style_form}>
+          <Row justify={'center'} align={'middle'}>
+            <Form.Item name="name" label="nome">
+              <Input style={{ width: 250 }} />
+            </Form.Item>
+          </Row>
+        </Form>
+      </Modal>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { Carousel, Row, Col } from 'antd';
 import { useState } from 'react';
-import '@/styles/globals.css';
+import '@/../public/styles/globals.css';
 export default function RepositoryExplanation() {
   const [arrowColorClass, setArrowColorClass] = useState('primary-arrow');
 

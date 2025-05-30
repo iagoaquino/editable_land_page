@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { MessageInstance } from 'antd/es/message/interface';
 
 interface information_to_save {
   primary_color: string;
@@ -15,10 +16,36 @@ interface information_to_save {
   main_text_weight: number;
   font_size: string;
   normal_text_font_family: string;
+  name: undefined | string;
 }
 
-const save_new_css_configuration = (data: information_to_save) => {
-  axios.post('http://localhost:5000/merge', (data = data));
+const save_new_css_configuration = async (data: information_to_save) => {
+  try {
+    if (data['name'] === undefined) {
+      await axios.post('http://localhost:5000/merge', (data = data));
+    } else {
+      await axios.post('http://localhost:5000/save_new', (data = data));
+    }
+  } catch (err) {
+    return false;
+  } finally {
+    console.log('terminei de atualizar');
+    return true;
+  }
 };
 
-export { save_new_css_configuration };
+const update_saved_files_list = async (): Promise<Array<string>> => {
+  return (await axios.get('http://localhost:5000/get_saved_files')).data;
+};
+
+const delete_file = async (file_name: string): Promise<boolean> => {
+  try {
+    axios.delete(`http://localhost:5000/delete/${file_name}`);
+  } catch (err) {
+    return false;
+  } finally {
+    return true;
+  }
+};
+
+export { save_new_css_configuration, update_saved_files_list, delete_file };

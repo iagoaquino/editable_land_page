@@ -1,7 +1,6 @@
 import { Typography, Row, Col, Image } from 'antd';
-import '@/styles/globals.css';
+import '@/../public/styles/globals.css';
 import my_photo from '@/assets/me_1.png';
-import { relative } from 'path';
 const { Text } = Typography;
 export default function Introduction() {
   return (
