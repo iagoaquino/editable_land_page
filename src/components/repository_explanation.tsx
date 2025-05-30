@@ -3,12 +3,15 @@ import { useState } from 'react';
 import '@/../public/styles/globals.css';
 export default function RepositoryExplanation() {
   const [arrowColorClass, setArrowColorClass] = useState('primary-arrow');
+  const [ProgressClass, setProgressClass] = useState('primary-progress');
 
   const handle_arrow_color_change = (position: number) => {
     if ((position + 1) % 2 == 1) {
       setArrowColorClass('primary-arrow');
+      setProgressClass('primary-progress');
     } else {
       setArrowColorClass('secondary-arrow');
+      setProgressClass('secondary-progress');
     }
   };
 
@@ -19,7 +22,7 @@ export default function RepositoryExplanation() {
           Programas desenvolvidos
         </Row>
         <Carousel
-          className={arrowColorClass}
+          className={`${arrowColorClass} ${ProgressClass}`}
           afterChange={handle_arrow_color_change}
           dotPosition="top"
           arrows
