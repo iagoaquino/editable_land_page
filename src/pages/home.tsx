@@ -9,7 +9,7 @@ import Experiences from '@/components/experience';
 import Contats from '@/components/contacts';
 import RepositoryExplanation from '@/components/repository_explanation';
 
-import '@/styles/globals.css';
+import '@/../public/styles/globals.css';
 
 const { Header, Content, Footer } = Layout;
 export default function Home() {
