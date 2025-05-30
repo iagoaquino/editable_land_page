@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { MessageInstance } from 'antd/es/message/interface';
 
 interface information_to_save {
   primary_color: string;
@@ -40,7 +39,7 @@ const update_saved_files_list = async (): Promise<Array<string>> => {
 
 const delete_file = async (file_name: string): Promise<boolean> => {
   try {
-    axios.delete(`http://localhost:5000/delete/${file_name}`);
+    await axios.delete(`http://localhost:5000/delete/${file_name}`);
   } catch (err) {
     return false;
   } finally {
