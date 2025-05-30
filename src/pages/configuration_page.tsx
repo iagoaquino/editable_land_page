@@ -116,9 +116,9 @@ export default function ConfigurationPage() {
     setLoading(true);
     try {
       if (await delete_file(name)) {
+        await updateSavedList();
         setShowModalSucess(true);
         setSelectedCss('');
-        await updateSavedList();
       }
     } catch (err) {
       setShowModalSucess(false);
