@@ -219,3 +219,5 @@ next-env.d.ts
 
 #Others
 *.zip
+
+public/saved_styles/
