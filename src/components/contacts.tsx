@@ -15,7 +15,7 @@ export default function Contats({ setHideContats }: contatsInterface) {
 
   return (
     <>
-      <Row justify={'center'} align={'middle'} className="secondary-background normal-text rounded">
+      <Row justify={'center'} align={'middle'} className="third-background normal-text rounded">
         <Col span={24}>
           <Row justify={'center'} align={'middle'} className="clicable">
             <GitHubIcon
@@ -65,7 +65,7 @@ export default function Contats({ setHideContats }: contatsInterface) {
               setHideContats(true);
             }}
           >
-            <CloseOutlined className="secondary-font-color" />
+            <CloseOutlined className="third-font-color" />
           </Row>
         </Col>
       </Row>

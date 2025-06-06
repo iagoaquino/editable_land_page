@@ -7,6 +7,7 @@ interface information_to_save {
 
   primary_font_color: string;
   secondary_font_color: string;
+  third_font_color: string;
 
   title_weight: number;
   title_size: string;

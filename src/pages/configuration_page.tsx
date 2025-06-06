@@ -35,6 +35,7 @@ export default function ConfigurationPage() {
   const [thirdColor, setThirdColor] = useState<string | Color>('');
   const [primaryFontColor, setPrimaryFontColor] = useState<string | Color>('');
   const [secondaryFontColor, setSecondaryFontColor] = useState<string | Color>('');
+  const [thirdFontColor, setThirdFontColor] = useState<string | Color>('');
 
   //Font configuration
   const [titleWeight, setTitleWeight] = useState<number | any>(0);
@@ -67,8 +68,10 @@ export default function ConfigurationPage() {
     setPrimaryColor(getComputedStyle(root).getPropertyValue('--primary-color'));
     setSecondaryColor(getComputedStyle(root).getPropertyValue('--secondary-color'));
     setThirdColor(getComputedStyle(root).getPropertyValue('--third-color'));
+
     setPrimaryFontColor(getComputedStyle(root).getPropertyValue('--primary-font-color'));
     setSecondaryFontColor(getComputedStyle(root).getPropertyValue('--secondary-font-color'));
+    setThirdFontColor(getComputedStyle(root).getPropertyValue('--third-font-color'));
   };
 
   const get_initial_font_configuration = () => {
@@ -93,6 +96,7 @@ export default function ConfigurationPage() {
           third_color: color_configurations['third_color'],
           primary_font_color: color_configurations['primary_font_color'],
           secondary_font_color: color_configurations['secondary_font_color'],
+          third_font_color: color_configurations['third_font_color'],
           title_weight: font_configuration['title_weight'],
           title_size: font_configuration['title_size'],
           title_font_family: font_configuration['title_font_family'],
@@ -184,8 +188,17 @@ export default function ConfigurationPage() {
         typeof secondaryFontColor == 'string'
           ? secondaryFontColor
           : secondaryFontColor!.toHexString(),
+      third_font_color:
+        typeof thirdFontColor == 'string' ? thirdFontColor : thirdFontColor!.toHexString(),
     };
-  }, [primaryColor, secondaryColor, thirdColor, primaryFontColor, secondaryFontColor]);
+  }, [
+    primaryColor,
+    secondaryColor,
+    thirdColor,
+    primaryFontColor,
+    secondaryFontColor,
+    thirdFontColor,
+  ]);
 
   const font_configuration = useMemo(() => {
     return {
@@ -204,7 +217,7 @@ export default function ConfigurationPage() {
     height: '20vh',
     borderRadius: '4px',
     borderStyle: 'solid',
-    borderColor: color_configurations['secondary_color'],
+    borderColor: color_configurations['primary_color'],
   };
 
   const example_box_secondary_style: React.CSSProperties = {
@@ -218,11 +231,11 @@ export default function ConfigurationPage() {
 
   const example_box_third_style: React.CSSProperties = {
     backgroundColor: color_configurations['third_color'],
-    color: color_configurations['primary_font_color'],
+    color: color_configurations['third_font_color'],
     height: '20vh',
     borderRadius: '4px',
     borderStyle: 'solid',
-    borderColor: color_configurations['secondary_color'],
+    borderColor: color_configurations['primary_color'],
   };
 
   const primary_style: React.CSSProperties = {
@@ -233,6 +246,11 @@ export default function ConfigurationPage() {
   const secondary_style: React.CSSProperties = {
     backgroundColor: color_configurations['secondary_color'],
     color: color_configurations['secondary_font_color'],
+  };
+
+  const third_style: React.CSSProperties = {
+    backgroundColor: color_configurations['third_color'],
+    color: color_configurations['third_font_color'],
   };
 
   const title_style: React.CSSProperties = {
@@ -302,6 +320,12 @@ export default function ConfigurationPage() {
                     value={secondaryFontColor}
                     onChange={setSecondaryFontColor}
                   ></ColorPicker>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={11}> Cor terciaria das fontes </Col>
+                <Col span={11} offset={1}>
+                  <ColorPicker value={thirdFontColor} onChange={setThirdFontColor}></ColorPicker>
                 </Col>
               </Row>
             </Card>
@@ -448,7 +472,7 @@ export default function ConfigurationPage() {
                     <Col span={2} offset={1}>
                       <Button
                         size="large"
-                        color="danger"
+                        style={primary_style}
                         variant="solid"
                         onClick={() => {
                           deleteFile(selectedCss);
@@ -460,7 +484,7 @@ export default function ConfigurationPage() {
                     <Col span={2} offset={1}>
                       <Button
                         size="large"
-                        color="green"
+                        style={primary_style}
                         variant="solid"
                         onClick={() => {
                           save(selectedCss);
@@ -472,7 +496,7 @@ export default function ConfigurationPage() {
                     <Col span={2} offset={1}>
                       <Button
                         size="large"
-                        color="primary"
+                        style={primary_style}
                         variant="solid"
                         onClick={() => {
                           setShowModalSaveNew(true);

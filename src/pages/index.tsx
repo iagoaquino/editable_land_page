@@ -117,7 +117,7 @@ export default function Home() {
           zIndex: 1200,
         }}
       >
-        <Button>
+        <Button className="third-background">
           <Row>
             <PhoneOutlined />
           </Row>
