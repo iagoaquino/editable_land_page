@@ -1,7 +1,6 @@
 import { Typography, Row, Col, Image } from 'antd';
-import '@/../public/styles/globals.css';
+
 import my_photo from '@/assets/me_1.png';
-const { Text } = Typography;
 export default function Introduction() {
   return (
     <>
