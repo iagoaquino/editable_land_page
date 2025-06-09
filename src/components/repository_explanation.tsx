@@ -1,6 +1,6 @@
 import { Carousel, Row, Col } from 'antd';
 import { useState } from 'react';
-import '@/../public/styles/globals.css';
+
 export default function RepositoryExplanation() {
   const [arrowColorClass, setArrowColorClass] = useState('primary-arrow');
   const [ProgressClass, setProgressClass] = useState('primary-progress');
