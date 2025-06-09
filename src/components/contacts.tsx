@@ -2,8 +2,6 @@ import { Row, Col } from 'antd';
 import { GitHubIcon, LinkedinIcon, GmailIcon, WhatsappIcon } from './svg_controler';
 import { CloseOutlined } from '@ant-design/icons';
 
-import '@/../public/styles/globals.css';
-
 interface contatsInterface {
   setHideContats: Function;
 }

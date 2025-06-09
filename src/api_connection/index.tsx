@@ -38,6 +38,14 @@ const update_saved_files_list = async (): Promise<Array<string>> => {
   return (await axios.get('http://localhost:5000/get_saved_files')).data;
 };
 
+const get_selected_style = async (folder: string, file_name: string): Promise<any> => {
+  return (
+    await axios.get(`http://localhost:5000/get_selected_css/${folder}/${file_name}`, {
+      responseType: 'text',
+    })
+  ).data;
+};
+
 const delete_file = async (file_name: string): Promise<boolean> => {
   try {
     await axios.delete(`http://localhost:5000/delete/${file_name}`);
@@ -48,4 +56,4 @@ const delete_file = async (file_name: string): Promise<boolean> => {
   }
 };
 
-export { save_new_css_configuration, update_saved_files_list, delete_file };
+export { save_new_css_configuration, update_saved_files_list, delete_file, get_selected_style };

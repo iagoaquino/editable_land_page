@@ -21,6 +21,7 @@ import {
   save_new_css_configuration,
   update_saved_files_list,
   delete_file,
+  get_selected_style,
 } from '@/api_connection/';
 
 const { Content, Footer, Header } = Layout;
@@ -143,19 +144,19 @@ export default function ConfigurationPage() {
     }
   };
 
-  const setCssConfiguration = (path: string) => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = path;
-    link.id = 'dynamic-theme';
-    document.head.append(link);
-
-    return link;
+  const changeCssConfiguration = async (folder: string, file_name: string) => {
+    const selected_css_text = await get_selected_style(folder, file_name);
+    const old_style = document.getElementById('configuration_css');
+    if (old_style) old_style.remove;
+    const new_style = document.createElement('style');
+    new_style.id = 'configuration_css';
+    new_style.innerText = selected_css_text;
+    document.head.appendChild(new_style);
   };
 
   //React functions
   useEffect(() => {
-    setCurrentStyleSheet(setCssConfiguration('styles/globals.css'));
+    changeCssConfiguration('applied_css', 'current_applied_style');
   }, []);
 
   useEffect(() => {
@@ -163,12 +164,12 @@ export default function ConfigurationPage() {
       get_initial_color_configuration();
       get_initial_font_configuration();
     }, 1000);
-  }, [currentStyleSheet]);
+  }, [selectedCss]);
 
   useEffect(() => {
     if (selectedCss !== '') {
-      document.head.removeChild(currentStyleSheet);
-      setCurrentStyleSheet(setCssConfiguration(`saved_styles/${selectedCss}.css`));
+      console.log(selectedCss);
+      changeCssConfiguration('saved_styles', selectedCss);
     }
   }, [selectedCss]);
 
@@ -487,6 +488,7 @@ export default function ConfigurationPage() {
                         style={primary_style}
                         variant="solid"
                         onClick={() => {
+                          console.log(selectedCss);
                           save(selectedCss);
                         }}
                       >
