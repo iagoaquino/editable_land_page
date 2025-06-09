@@ -3,7 +3,6 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 ## Getting Started
 
 Install Node dependencies using:
-
 ```bash
 npm install
 ```
@@ -20,9 +19,6 @@ pnpm dev
 # or
 bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Project Description
@@ -42,5 +38,5 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - An interactive Next.js tutorial.
 - [Antd](https://ant.design/) - Learn more about the antdesign framework
 - [Axios](https://axios-http.com/ptbr/docs/intro) - Learn more about Axios
-
+- 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
