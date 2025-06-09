@@ -1,6 +1,7 @@
 import { Row, Col, Layout, Menu, Divider, Button } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { get_selected_style } from '@/api_connection';
 
 import { PhoneOutlined } from '@ant-design/icons';
 
@@ -9,9 +10,7 @@ import Experiences from '@/components/experience';
 import Contats from '@/components/contacts';
 import RepositoryExplanation from '@/components/repository_explanation';
 
-import '@/../public/styles/globals.css';
-
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 export default function Home() {
   const router = useRouter();
   const items = [
@@ -35,8 +34,22 @@ export default function Home() {
 
   const [hideFooter, setHideFooter] = useState<boolean>(true);
 
+  const update_css = async () => {
+    const current_css_text = await get_selected_style('applied_css', 'current_applied_style');
+    const oldStyle = document.getElementById('dynamic_style');
+    if (oldStyle) oldStyle.remove();
+
+    const newStyle = document.createElement('style');
+    newStyle.id = 'dynamic_style';
+    newStyle.innerText = current_css_text;
+    document.head.appendChild(newStyle);
+  };
+
+  useEffect(() => {
+    update_css();
+  }, []);
+
   const wheel_handler = (action_value: number) => {
-    console.log(hideFooter);
     setHideHeader(action_value > 0 ? true : false);
   };
 
