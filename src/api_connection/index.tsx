@@ -19,12 +19,14 @@ interface information_to_save {
   name: undefined | string;
 }
 
+const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL, timeout: 5000 });
+
 const save_new_css_configuration = async (data: information_to_save) => {
   try {
     if (data['name'] === undefined) {
-      await axios.post('http://localhost:5000/merge', (data = data));
+      await api.post('merge', (data = data));
     } else {
-      await axios.post('http://localhost:5000/save_new', (data = data));
+      await api.post('save_new', (data = data));
     }
   } catch (err) {
     return false;
@@ -35,7 +37,16 @@ const save_new_css_configuration = async (data: information_to_save) => {
 };
 
 const update_saved_files_list = async (): Promise<Array<string>> => {
-  return (await axios.get('http://localhost:5000/get_saved_files')).data;
+  console.log(api.arguments);
+  return (await api.get('get_saved_files')).data;
+};
+
+const get_selected_style = async (folder: string, file_name: string): Promise<any> => {
+  return (
+    await api.get(`get_selected_css/${folder}/${file_name}`, {
+      responseType: 'text',
+    })
+  ).data;
 };
 
 const get_selected_style = async (folder: string, file_name: string): Promise<any> => {
@@ -48,7 +59,7 @@ const get_selected_style = async (folder: string, file_name: string): Promise<an
 
 const delete_file = async (file_name: string): Promise<boolean> => {
   try {
-    await axios.delete(`http://localhost:5000/delete/${file_name}`);
+    await api.delete(`delete/${file_name}`);
   } catch (err) {
     return false;
   } finally {
