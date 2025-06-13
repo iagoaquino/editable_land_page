@@ -1,4 +1,4 @@
-function GitHubIcon(props: Record<string, any>) {
+function GitHubIcon(props: Record<string, string | ((value: undefined) => void)>) {
   return (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
       <g fill="currentColor">
@@ -13,7 +13,7 @@ function GitHubIcon(props: Record<string, any>) {
   );
 }
 
-function LinkedinIcon(props: Record<string, any>) {
+function LinkedinIcon(props: Record<string, string | ((value: undefined) => void)>) {
   return (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
       <g fill="currentColor">
@@ -23,7 +23,7 @@ function LinkedinIcon(props: Record<string, any>) {
   );
 }
 
-function WhatsappIcon(props: Record<string, any>) {
+function WhatsappIcon(props: Record<string, string | ((value: undefined) => void)>) {
   return (
     <svg {...props} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <g fill="currentColor">
@@ -33,7 +33,7 @@ function WhatsappIcon(props: Record<string, any>) {
   );
 }
 
-function GmailIcon(props: Record<string, any>) {
+function GmailIcon(props: Record<string, string | ((value: undefined) => void)>) {
   return (
     <svg {...props} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <g fill="currentColor">

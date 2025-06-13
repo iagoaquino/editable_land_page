@@ -1,18 +1,16 @@
-import { Row, Col, Layout, Menu, Divider, Button } from 'antd';
+import { Row, Layout, Menu, Button } from 'antd';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { get_selected_style } from '@/api_connection';
-
-import { PhoneOutlined } from '@ant-design/icons';
-
-import Introduction from '@/components/introduction';
-import Experiences from '@/components/experience';
-import Contats from '@/components/contacts';
-import RepositoryExplanation from '@/components/repository_explanation';
+import { get_selected_style } from '../api_connection';
+import { useNavigate } from 'react-router';
+import { PhoneFilled } from '@ant-design/icons';
+import Introduction from '../components/introduction';
+import Experiences from '../components/experience';
+import Contats from '../components/contacts';
+import RepositoryExplanation from '../components/repository_explanation';
 
 const { Header, Content } = Layout;
 export default function Home() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const items = [
     {
       key: 'introduction',
@@ -53,6 +51,7 @@ export default function Home() {
     setHideHeader(action_value > 0 ? true : false);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const navegation_handler = (key: any) => {
     setCurrentKey(key['keyPath']);
   };
@@ -80,14 +79,14 @@ export default function Home() {
           onClick={navegation_handler}
         />
       </Header>
-      <Content>
+      <Content style={{ width: '100%' }}>
         <Row
           id="introduction"
           onMouseOver={() => {
             setCurrentKey(['introduction']);
           }}
           onClick={() => {
-            router.push('#introduction');
+            navigate('#introduction');
           }}
         >
           <Introduction />
@@ -98,7 +97,7 @@ export default function Home() {
             setCurrentKey(['experiences']);
           }}
           onClick={() => {
-            router.push('#experiences');
+            navigate('#experiences');
           }}
         >
           <Experiences />
@@ -109,7 +108,7 @@ export default function Home() {
             setCurrentKey(['programas_desenvolvidos']);
           }}
           onClick={() => {
-            router.push('#programas_desenvolvidos');
+            navigate('#programas_desenvolvidos');
           }}
         >
           <RepositoryExplanation />
@@ -132,7 +131,7 @@ export default function Home() {
       >
         <Button className="third-background">
           <Row>
-            <PhoneOutlined />
+            <PhoneFilled />
           </Row>
         </Button>
       </Row>

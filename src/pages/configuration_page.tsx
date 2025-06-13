@@ -4,45 +4,43 @@ import {
   Row,
   Col,
   Button,
-  GetProp,
-  ColorPickerProps,
   Select,
   Card,
   InputNumber,
   Modal,
   Input,
   Form,
-  notification,
   Spin,
 } from 'antd';
-import React, { useState, useEffect, useMemo, useReducer } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { DeleteFilled, PlusOutlined, EditFilled } from '@ant-design/icons';
 import {
   save_new_css_configuration,
   update_saved_files_list,
   delete_file,
   get_selected_style,
-} from '@/api_connection/';
+} from '../api_connection';
 
-const { Content, Footer, Header } = Layout;
+const { Content, Header } = Layout;
 const { Option } = Select;
 
 export default function ConfigurationPage() {
-  type Color = Extract<GetProp<ColorPickerProps, 'value'>, string | { cleared: any }>;
-
   //Color configuration
-  const [primaryColor, setPrimaryColor] = useState<string | Color>('');
-  const [secondaryColor, setSecondaryColor] = useState<string | Color>('');
-  const [thirdColor, setThirdColor] = useState<string | Color>('');
-  const [primaryFontColor, setPrimaryFontColor] = useState<string | Color>('');
-  const [secondaryFontColor, setSecondaryFontColor] = useState<string | Color>('');
-  const [thirdFontColor, setThirdFontColor] = useState<string | Color>('');
+  const [primaryColor, setPrimaryColor] = useState<any>('');
+  const [secondaryColor, setSecondaryColor] = useState<any>('');
+  const [thirdColor, setThirdColor] = useState<any>('');
+  const [primaryFontColor, setPrimaryFontColor] = useState<any>('');
+  const [secondaryFontColor, setSecondaryFontColor] = useState<any>('');
+  const [thirdFontColor, setThirdFontColor] = useState<any>('');
 
   //Font configuration
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [titleWeight, setTitleWeight] = useState<number | any>(0);
   const [titleSize, setTitleSize] = useState<string>('');
   const [titleFontFamily, setTitleFontFamily] = useState<string>('');
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [mainTextWeight, setMainTextWeight] = useState<number | any>(0);
   const [fontSize, setFontSize] = useState<string>('');
   const [normalTextFontFamily, setNormalTextFontFamily] = useState<string>('');
@@ -53,7 +51,6 @@ export default function ConfigurationPage() {
   //Necessary data
   const [savedCssList, setSavedCssList] = useState<Array<string>>([]);
   const [selectedCss, setSelectedCss] = useState<string>('');
-  const [currentStyleSheet, setCurrentStyleSheet] = useState<any>();
 
   //Modal manager
   const [showModalSaveNew, setShowModalSaveNew] = useState<boolean>(false);
@@ -111,6 +108,7 @@ export default function ConfigurationPage() {
         updateSavedList();
       }
     } catch (err) {
+      console.log(err);
       setShowModalError(true);
     } finally {
       setLoading(false);
@@ -147,7 +145,7 @@ export default function ConfigurationPage() {
   const changeCssConfiguration = async (folder: string, file_name: string) => {
     const selected_css_text = await get_selected_style(folder, file_name);
     const old_style = document.getElementById('configuration_css');
-    if (old_style) old_style.remove;
+    if (old_style) old_style.remove();
     const new_style = document.createElement('style');
     new_style.id = 'configuration_css';
     new_style.innerText = selected_css_text;
@@ -249,11 +247,6 @@ export default function ConfigurationPage() {
     color: color_configurations['secondary_font_color'],
   };
 
-  const third_style: React.CSSProperties = {
-    backgroundColor: color_configurations['third_color'],
-    color: color_configurations['third_font_color'],
-  };
-
   const title_style: React.CSSProperties = {
     fontWeight: font_configuration['title_weight'],
     fontSize: font_configuration['title_size'],
@@ -267,7 +260,7 @@ export default function ConfigurationPage() {
   };
 
   return (
-    <>
+    <div style={{ width: '183.2vh', height: '100vh' }}>
       <Header>
         <Row justify={'center'} align={'middle'} className="title primary-font-color">
           Pagina de configuração
@@ -658,6 +651,6 @@ export default function ConfigurationPage() {
           </Row>
         </Form>
       </Modal>
-    </>
+    </div>
   );
 }
