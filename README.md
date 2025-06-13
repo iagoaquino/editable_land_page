@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Getting Started
 
 Install Node dependencies using:
@@ -8,7 +6,6 @@ Install Node dependencies using:
 npm install
 ```
 
-Then run the Node development server and python flask api:
 Node:
 
 ```bash
@@ -21,14 +18,6 @@ pnpm dev
 bun dev
 ```
 
-Flask:
-
-```bash
-flask --app css_manager run
-```
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
 ## Project Description
 
 This project is a land page made by me about me, even though it looks quite simple its main purpose was to learn more about Css,Flask and Nextjs, and to do that I made this land page self editable. if you visit path localhost:3000/configuration_page you will se a page that will allow you to edit colors and fonts of the main page.
@@ -40,10 +29,8 @@ To make the site style easy to change I use good practice in CSS by adding all c
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about Vite,Antd and axios, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - Learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - An interactive Next.js tutorial.
+- [Vite](https://vite.dev/) - Learn more about vite
 - [Antd](https://ant.design/) - Learn more about the antdesign framework
 - [Axios](https://axios-http.com/ptbr/docs/intro) - Learn more about Axios
-- You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
