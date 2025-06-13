@@ -3,7 +3,7 @@ import { GitHubIcon, LinkedinIcon, GmailIcon, WhatsappIcon } from './svg_control
 import { CloseOutlined } from '@ant-design/icons';
 
 interface contatsInterface {
-  setHideContats: Function;
+  setHideContats: (value: boolean) => void;
 }
 
 export default function Contats({ setHideContats }: contatsInterface) {
