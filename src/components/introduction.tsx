@@ -1,6 +1,6 @@
-import { Typography, Row, Col, Image } from 'antd';
+import { Row, Col, Image } from 'antd';
 
-import my_photo from '@/assets/me_1.png';
+import my_photo from '../assets/me_1.png';
 export default function Introduction() {
   return (
     <>
@@ -30,7 +30,11 @@ export default function Introduction() {
         </Col>
         <Col span={10}>
           <Row>
-            <Image src={my_photo.src} height={'80vh'} width={'100vh'}></Image>
+            <Image
+              alt="Minha foto"
+              src={my_photo}
+              style={{ width: '100%', height: '80vh' }}
+            ></Image>
           </Row>
         </Col>
       </Row>

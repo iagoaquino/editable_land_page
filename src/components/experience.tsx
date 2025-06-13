@@ -1,5 +1,5 @@
 import { Row, Col, Steps } from 'antd';
-import { JSX, useState } from 'react';
+import { useState } from 'react';
 export default function Experiences() {
   const text_components = [
     <>
@@ -34,7 +34,7 @@ export default function Experiences() {
     </>,
   ];
 
-  const [currentText, setCurrentText] = useState<JSX.Element>(text_components[0]);
+  const [currentText, setCurrentText] = useState(text_components[0]);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const text_change = (value: number) => {
     setCurrentStep(value);
